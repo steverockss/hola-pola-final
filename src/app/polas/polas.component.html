@@ -21,6 +21,26 @@
                   [closeOthers]="true"
                   activeIds="panel1"
                 >
+                <ngb-panel id="panel0">
+                  <ng-template ngbPanelTitle>
+                    <span> Plan Tranqui </span>
+                  </ng-template>
+                  <ng-template ngbPanelContent>
+                    <button class="btn btn-success" (click)="plan(6)">
+                      Plan Tranqui (6)
+                    </button>
+                    
+                    <hr />
+                    <button class="btn btn-success" (click)="plan(12)">
+                      Plan charladito (12)
+                    </button>
+                    <hr />
+                    <button class="btn btn-success" (click)="plan(24)">
+                      Plan denso (24)
+                    </button>
+        
+                  </ng-template>
+                </ngb-panel>
                   <ngb-panel id="panel1">
                     <ng-template ngbPanelTitle>
                       <span>Estilo</span>
