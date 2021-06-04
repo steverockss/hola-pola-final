@@ -1,8 +1,8 @@
-import { NgIf } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { Pola } from "app/core/models/pola";
 import { PolaItem } from "app/core/models/polaItem";
 import swal from "sweetalert2";
+import { CartService } from "app/services/cart.service";
 @Component({
   selector: "app-polas",
   templateUrl: "./polas.component.html",
@@ -17,7 +17,7 @@ export class PolasComponent implements OnInit {
   cartMax: number = 10000;
   cartCount: number = 0;
   polasFiltered: Pola[] = [];
-  constructor() {}
+  constructor(private cartService: CartService) {}
 
   ngOnInit(): void {
     sessionStorage.setItem("cart", JSON.stringify(this.polas));
@@ -234,7 +234,7 @@ export class PolasComponent implements OnInit {
         this.polas.splice(index, 1);
       }
     });
-    this.polas = this.polas.filter( p => p.estilo.includes("Ale"));
+    this.polas = this.polas.filter((p) => p.estilo.includes("Ale"));
   }
   filterIpa() {
     this.listPolas();
@@ -249,7 +249,7 @@ export class PolasComponent implements OnInit {
         this.polas.splice(index, 1);
       }
     });
-    this.polas = this.polas.filter( p => p.estilo.includes("IPA"));
+    this.polas = this.polas.filter((p) => p.estilo.includes("IPA"));
   }
   filterStout() {
     this.listPolas();
@@ -264,10 +264,10 @@ export class PolasComponent implements OnInit {
         this.polas.splice(index, 1);
       }
     });
-    this.polas = this.polas.filter( p => p.estilo.includes("Stout"));
+    this.polas = this.polas.filter((p) => p.estilo.includes("Stout"));
   }
 
-  filterAmargor(amargo: string){
+  filterAmargor(amargo: string) {
     this.listPolas();
     this.polasFiltered = [];
     this.polas.forEach((element, index) => {
@@ -278,19 +278,23 @@ export class PolasComponent implements OnInit {
         this.polas.splice(index, 1);
       }
     });
-    this.polas = this.polas.filter( p => p.amargor.includes(amargo));
+    this.polas = this.polas.filter((p) => p.amargor.includes(amargo));
   }
 
-  plan(number: number){
+  plan(number: number) {
     this.cartMax = number;
-    swal.fire("Has seleccionado un plan", "Recuerda que  si superas la cantidad de polas del plan no podras agregar más productos al carrito", "success")
+    swal.fire(
+      "Has seleccionado un plan",
+      "Recuerda que  si superas la cantidad de polas del plan no podras agregar más productos al carrito",
+      "success"
+    );
   }
 
   addToCart(pola: Pola) {
     let polaI = new PolaItem(pola, 1, pola.price);
     let cart = sessionStorage.getItem("cart");
-    console.log(this.cartCount, this.cartMax)
-    if(this.cartCount >= this.cartMax){
+    console.log(this.cartCount, this.cartMax);
+    if (this.cartCount >= this.cartMax) {
       swal.fire({
         title: `!Ups! no puedes agregar más polas en tu plan seleccionado`,
         width: 600,
@@ -304,35 +308,35 @@ export class PolasComponent implements OnInit {
           no-repeat
           `,
       });
-      
-    }else{
-    if (cart === "undefined") {
-      let polas_carrito: PolaItem[] = [];
-      polas_carrito.push(polaI);
-      sessionStorage.setItem("cart", JSON.stringify(polas_carrito));
     } else {
-      let polas_carrito = JSON.parse(sessionStorage.getItem("cart"));
-      polas_carrito.push(polaI);
-      sessionStorage.setItem("cart", JSON.stringify(polas_carrito));
-    }
-    this.cartCount++
+      if (cart === "undefined") {
+        let polas_carrito: PolaItem[] = [];
+        polas_carrito.push(polaI);
+        sessionStorage.setItem("cart", JSON.stringify(polas_carrito));
+      } else {
+        let polas_carrito = JSON.parse(sessionStorage.getItem("cart"));
+        polas_carrito.push(polaI);
+        sessionStorage.setItem("cart", JSON.stringify(polas_carrito));
+      }
+      var elements = sessionStorage.getItem("cartElements");
+      var newElements = parseInt(elements) + 1;
+      sessionStorage.setItem("cartElements", newElements.toString());
+      this.cartCount++;
+      this.cartService.addToCart(this.cartCount)
 
-
-    swal.fire({
-      title: `Producto agregado al carrito de compras.`,
-      width: 600,
-      padding: `3em`,
-      imageUrl: `https://icons-for-free.com/iconfiles/png/512/cart+checked+ecommerce+online+shopping+shopping+cart+icon-1320165952137863404.png`,
-      imageWidth: 200,
-      imageHeight: 200,
-      timer: 5000,
-      backdrop: `
+      swal.fire({
+        title: `Producto agregado al carrito de compras.`,
+        width: 600,
+        padding: `3em`,
+        imageUrl: `https://icons-for-free.com/iconfiles/png/512/cart+checked+ecommerce+online+shopping+shopping+cart+icon-1320165952137863404.png`,
+        imageWidth: 200,
+        imageHeight: 200,
+        timer: 5000,
+        backdrop: `
         rgba(0,0,123,0.4)
         no-repeat
         `,
-    });
-    
-
+      });
     }
   }
 }

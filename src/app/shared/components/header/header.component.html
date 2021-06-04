@@ -103,7 +103,7 @@
             [routerLink]="['/shopping-car']"
           >
             <i class="fas fa-shopping-cart">
-              <span class="badge badge-danger ml-2"> 1 </span>
+              <span class="badge badge-danger ml-2"> {{total$ | async}} </span>
             </i>
            
           </a>

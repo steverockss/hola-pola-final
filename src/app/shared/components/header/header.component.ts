@@ -1,7 +1,8 @@
 import { Component, OnInit, ElementRef } from "@angular/core";
 import { Location } from "@angular/common";
 import { Observable } from "rxjs";
-
+import { CartService } from "../../../services/cart.service";
+import { map } from "rxjs/operators";
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -10,15 +11,16 @@ import { Observable } from "rxjs";
 export class HeaderComponent implements OnInit {
   private toggleButton: any;
   private sidebarVisible: boolean;
-  total$: Observable<number>;
+  total$: Observable<Number>;
   currentRole: string = "";
 
   constructor(
     public location: Location,
     private element: ElementRef,
+    private cartService: CartService,
   ) {
 
-
+    this.total$ = this.cartService.cart$
 
     this.sidebarVisible = false;
   }

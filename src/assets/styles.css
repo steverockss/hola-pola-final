@@ -1,6 +1,6 @@
 .recipe-title {
   font-family: "Bobby";
-  font-size: 70px;
+  font-size: 60px;
   color: black;
   text-align: center;
 }
@@ -139,7 +139,7 @@ div {
 }
 
 .recipe-title {
-  font-size: 100px;
+  font-size: 70px;
 }
 .pola-card .card-img-top {
   width: 100%;
